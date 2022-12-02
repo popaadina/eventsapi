@@ -1,5 +1,8 @@
 package com.app.eventsmanagementapi.dto;
 
+import lombok.ToString;
+
+@ToString
 public class LoginRequest {
     private String username;
     private String password;
