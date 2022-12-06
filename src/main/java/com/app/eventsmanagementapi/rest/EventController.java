@@ -1,31 +1,23 @@
 package com.app.eventsmanagementapi.rest;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.app.eventsmanagementapi.dto.EventDto;
 import com.app.eventsmanagementapi.dto.Filter;
 import com.app.eventsmanagementapi.models.Event;
 import com.app.eventsmanagementapi.service.EventService;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("api/events")
+@CrossOrigin(origins = "http://localhost:4200")
+@Slf4j
 public class EventController {
 
     @Autowired
@@ -33,6 +25,7 @@ public class EventController {
 
     @GetMapping
     List<Event> getAll() {
+        log.info("Trying to get all events");
         return eventService.getAllEvents();
     }
 

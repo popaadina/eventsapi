@@ -30,9 +30,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("A intrat in CustomAuthorizationFilter");
+        log.info("The request method is: {}" ,request.getMethod());
+
         if(request.getServletPath().equals("/api/auth/login") ||
                 request.getServletPath().equals("/api/auth/token/refresh") ||
-                request.getServletPath().equals("/api/auth/signup")) {
+                request.getServletPath().equals("/api/auth/signup") ||
+                request.getMethod().equals("OPTIONS")) {
             filterChain.doFilter(request, response);
         } else {
 
@@ -41,6 +44,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             // verificatorul JWTVerifier
 
             String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+            log.info("This is the authorizationHeader: {}", authorizationHeader);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
@@ -50,10 +55,15 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     String username = decodedJWT.getSubject();
                     // In cazul in care vrei sa verifici in functie de rol daca are acces.
                     String[] roles = decodedJWT.getClaim("roluri").asArray(String.class);
+
+                    // Aici verifici rolurile in functie de ce endpoint a ales:
+                    // TODO
+
+
                     filterChain.doFilter(request, response);
                 }catch (Exception exception) {
                     log.error("Error logging in: {}", exception);
-//                    response.setHeader("error", exception.getMessage());
+                    response.setHeader("error", exception.getMessage());
                     response.setStatus(UNAUTHORIZED.value());
                     Map<String, String> error = new HashMap<>();
                     error.put("error_message", exception.getMessage());

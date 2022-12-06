@@ -10,16 +10,4 @@ public class EventsmanagementapiApplication {
 		SpringApplication.run(EventsmanagementapiApplication.class, args);
 	}
 
-//	@Bean
-//	public FilterRegistrationBean<AuthFilter> authFilter(){
-//		FilterRegistrationBean<AuthFilter> registrationBean
-//				= new FilterRegistrationBean<>();
-//
-//		registrationBean.setFilter(new AuthFilter());
-//		registrationBean.addUrlPatterns("/api/auth/*");
-//		registrationBean.setOrder(2);
-//
-//		return registrationBean;
-//	}
-
 }
