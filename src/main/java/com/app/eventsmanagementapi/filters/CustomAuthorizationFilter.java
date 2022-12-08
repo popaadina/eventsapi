@@ -31,11 +31,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("A intrat in CustomAuthorizationFilter");
         log.info("The request method is: {}" ,request.getMethod());
+        log.info("The request for events is: {}", request.getServletPath());
 
         if(request.getServletPath().equals("/api/auth/login") ||
                 request.getServletPath().equals("/api/auth/token/refresh") ||
                 request.getServletPath().equals("/api/auth/signup") ||
-                request.getMethod().equals("OPTIONS")) {
+                request.getMethod().equals("OPTIONS") ||
+                request.getServletPath().equals("/api/events")) {
             filterChain.doFilter(request, response);
         } else {
 
@@ -74,6 +76,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             } else {
                 log.error("Error nu exista headerul cu Bearer");
                 response.setStatus(UNAUTHORIZED.value());
+                response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", "Nu aveti token-ul in headerul de Authorization");
                 response.setContentType(APPLICATION_JSON_VALUE);
